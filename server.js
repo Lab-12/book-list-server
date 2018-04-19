@@ -17,6 +17,7 @@ client.on('error', err => console.error(err));
 
 // Application Middleware
 app.use(cors());
+// app.use(express.urlencoded({extended:true}));
 
 // API Endpoints
 app.get('/api/v1/books', (req, res) => {
