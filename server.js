@@ -5,6 +5,8 @@ const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
 
+require('dotenv').config();
+
 // Application Setup
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +19,7 @@ client.on('error', err => console.error(err));
 
 // Application Middleware
 app.use(cors());
-// app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:true}));
 
 // API Endpoints
 app.get('/api/v1/books', (req, res) => {
@@ -39,12 +41,12 @@ app.get('/api/v1/books/:id', (req, res) => {
   });
 })
 
-app.post('/api/v1/books/', (req, res) => {
+app.post('/api/v1/books', (req, res) => {
   client.query(`
-  INSERT INTO books (book_id, title, author, image_url, isbn)
-  VALUES ($1, $2, $3, $4, $5)
+  INSERT INTO books (title, author, image_url, isbn)
+  VALUES ($1, $2, $3, $4)
   ON CONFLICT NOTHING;`,
-  [req.body.book_id, req.body.title, req.body.author, req.body.image_url, req.body.isbn],
+  [req.body.title, req.body.author, req.body.image_url, req.body.isbn],
   function (err) {
     if (err) console.error(err);
     res.send('insertion complete');
